@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Button } from "../ui/button";
+import { FC, forwardRef } from "react";
+import { Button, ButtonProps } from "../ui/button";
 import { Icon, IconProps } from "./icon";
 import {
   Tooltip,
@@ -9,42 +9,58 @@ import {
 } from "../ui/tooltip";
 import { Shortcut } from "./shortcut";
 
-interface ButtonToggleProps {
-  tooltip: string;
+interface ButtonToggleProps extends ButtonProps {
+  tooltip?: string;
   label: string;
   shortcut?: string[];
   icon: IconProps["name"];
   active?: boolean;
+  withChevron?: boolean;
 }
 
-export const ButtonToggle: FC<ButtonToggleProps> = ({
-  tooltip,
-  shortcut,
-  active = false,
-  icon,
-  label,
-}) => {
-  let content = (
-    <Button variant={active ? "secondary" : "ghost"} size="sm">
-      <Icon name={icon} />
-      <span className="sr-only">{label}</span>
-    </Button>
-  );
-
-  if (tooltip) {
-    content = (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>{content}</TooltipTrigger>
-
-          <TooltipContent className="flex items-center space-x-2">
-            <span>{tooltip}</span>
-            <Shortcut shortcut={shortcut} />
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+export const ButtonToggle = forwardRef<HTMLButtonElement, ButtonToggleProps>(
+  (
+    {
+      tooltip,
+      shortcut,
+      active = false,
+      icon,
+      label,
+      withChevron = false,
+      ...props
+    },
+    ref
+  ) => {
+    let content = (
+      <Button
+        ref={ref}
+        variant={active ? "secondary" : "ghost"}
+        size="sm"
+        {...props}
+      >
+        <Icon name={icon} />
+        <span className="sr-only">{label}</span>
+        {withChevron && <Icon name="ChevronDown" className="h-2 w-2 ml-2" />}
+      </Button>
     );
-  }
 
-  return content;
-};
+    if (tooltip) {
+      content = (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>{content}</TooltipTrigger>
+
+            <TooltipContent className="flex items-center space-x-2">
+              <span>{tooltip}</span>
+              <Shortcut shortcut={shortcut} />
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    }
+
+    return content;
+  }
+);
+
+ButtonToggle.displayName = "ButtonToggle";
