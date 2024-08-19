@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "../../ui/card";
 import { TextStyle } from "./ui/text-style";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FontFamily } from "./ui/font-family";
 import { FontWeight } from "./ui/font-weight";
 import { FontItalic } from "./ui/font-italic";
@@ -33,9 +33,12 @@ import { TextCodeBlock } from "./ui/text-code-block";
 import { LinkBubble } from "./ui/link-bubble";
 import { LinkDialog } from "./ui/link-dialog";
 import { LinkContext } from "./context/link-context";
+import { LinkDialogYoutube } from "./ui/link-dialog-youtube";
+import { LinkYtContext } from "./context/link-yt-context";
 
 export const EditorBlock = () => {
-  const [open, setOpen] = useState(false);
+  const [linkOpen, setLinkOpen] = useState(false);
+  const [linkYtOpen, linkYtsetOpen] = useState(false);
 
   const editor = useEditor({
     extensions: ExtensionKit(),
@@ -61,55 +64,62 @@ export const EditorBlock = () => {
   if (!editor) return null;
 
   return (
-    <LinkContext.Provider value={{ open, setOpen }}>
-      <Card className="max-w-6xl mx-auto">
-        <CardHeader className="sr-only">
-          <CardTitle className="sr-only">Rich Text Editor</CardTitle>
-          <CardDescription className="sr-only">
-            Write your content
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="p-1 flex items-center gap-1 border-b divide-x *:pl-1 first:pl-0">
-            <TextStyle editor={editor} />
-            <FontFamily editor={editor} />
-            <FontSize editor={editor} />
+    <LinkYtContext.Provider
+      value={{ open: linkYtOpen, setOpen: linkYtsetOpen }}
+    >
+      <LinkContext.Provider value={{ open: linkOpen, setOpen: setLinkOpen }}>
+        <Card className="max-w-6xl mx-auto">
+          <CardHeader className="sr-only">
+            <CardTitle className="sr-only">Rich Text Editor</CardTitle>
+            <CardDescription className="sr-only">
+              Write your content
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="p-1 flex items-center gap-1 border-b divide-x *:pl-1 first:pl-0">
+              <TextStyle editor={editor} />
+              <FontFamily editor={editor} />
+              <FontSize editor={editor} />
 
-            <div className="flex space-x-1">
-              <FontWeight editor={editor} />
-              <FontItalic editor={editor} />
-              <FontUnderline editor={editor} />
-              <FontStrike editor={editor} />
-              <FontCode editor={editor} />
-              <FontColor editor={editor} />
-              <FontHighlighter editor={editor} />
-              <FontSubscript editor={editor} />
-              <FontSuperscript editor={editor} />
+              <div className="flex space-x-1">
+                <FontWeight editor={editor} />
+                <FontItalic editor={editor} />
+                <FontUnderline editor={editor} />
+                <FontStrike editor={editor} />
+                <FontCode editor={editor} />
+                <FontColor editor={editor} />
+                <FontHighlighter editor={editor} />
+                <FontSubscript editor={editor} />
+                <FontSuperscript editor={editor} />
+              </div>
+
+              <div className="flex space-x-1">
+                <ListBullet editor={editor} />
+                <ListOrdered editor={editor} />
+                <ListTask editor={editor} />
+              </div>
+
+              <div className="flex space-x-1">
+                <TextAlign editor={editor} />
+                <TextCodeBlock editor={editor} />
+                <LinkDialog editor={editor} />
+                {/* Image */}
+                <LinkDialogYoutube editor={editor} />
+                {/* Youtube */}
+              </div>
             </div>
 
-            <div className="flex space-x-1">
-              <ListBullet editor={editor} />
-              <ListOrdered editor={editor} />
-              <ListTask editor={editor} />
+            <div className="p-4 max-w-none">
+              <EditorContent
+                editor={editor}
+                className="focus-visible:outline-none focus-visible:ring-0"
+              />
             </div>
 
-            <div className="flex space-x-1">
-              <TextAlign editor={editor} />
-              <TextCodeBlock editor={editor} />
-              <LinkDialog editor={editor} />
-            </div>
-          </div>
-
-          <div className="p-4 max-w-none">
-            <EditorContent
-              editor={editor}
-              className="focus-visible:outline-none focus-visible:ring-0"
-            />
-          </div>
-
-          <LinkBubble editor={editor} />
-        </CardContent>
-      </Card>
-    </LinkContext.Provider>
+            <LinkBubble editor={editor} />
+          </CardContent>
+        </Card>
+      </LinkContext.Provider>
+    </LinkYtContext.Provider>
   );
 };

@@ -22,6 +22,7 @@ import { Superscript } from "@tiptap/extension-superscript";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Code } from "@tiptap/extension-code";
 import { Link } from "@tiptap/extension-link";
+import { Youtube } from "@tiptap/extension-youtube";
 
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
@@ -66,5 +67,10 @@ export const ExtensionKit = () => [
     protocols: ["http", "https", "mailto", "tel"],
     defaultProtocol: "https",
     openOnClick: false,
+  }),
+  Youtube.configure({
+    controls: true,
+    nocookie: true,
+    allowFullscreen: true,
   }),
 ];

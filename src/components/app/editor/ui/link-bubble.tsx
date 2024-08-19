@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BubbleMenu, Editor } from "@tiptap/react";
 import { FC, useContext } from "react";
 import { Icon } from "../../icon";
-import { Input } from "@/components/ui/input";
 import { LinkContext } from "../context/link-context";
 
 interface Props {
