@@ -1,0 +1,36 @@
+/* For the placeholder */
+.tiptap p.is-editor-empty:first-child::before {
+  @apply text-neutral-400 float-left h-0 pointer-events-none content-[attr(data-placeholder)];
+}
+
+/* For the Task List */
+.tiptap {
+  :first-child {
+    @apply mt-0;
+  }
+
+  /* Task list specific styles */
+  ul[data-type="taskList"] {
+    @apply list-none ml-0 pl-0;
+
+    li {
+      @apply flex items-start;
+
+      > label {
+        @apply flex-none mr-2 select-none;
+      }
+
+      > div {
+        @apply flex-grow;
+      }
+    }
+
+    input[type="checkbox"] {
+      @apply cursor-pointer;
+    }
+
+    ul[data-type="taskList"] {
+      @apply m-0;
+    }
+  }
+}

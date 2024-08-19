@@ -1,5 +1,4 @@
 import { EditorBlock } from "@/components/app/editor/editor-block";
-import Image from "next/image";
 
 export default function Home() {
   return (

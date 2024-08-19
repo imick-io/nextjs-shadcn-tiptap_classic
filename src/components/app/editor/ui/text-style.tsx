@@ -61,11 +61,11 @@ const items = [
   action?: (editor: Editor) => void;
 }[];
 
-interface TypographyStyleProps {
+interface TextStyleProps {
   editor: Editor;
 }
 
-export const TypographyStyle: FC<TypographyStyleProps> = ({ editor }) => {
+export const TextStyle: FC<TextStyleProps> = ({ editor }) => {
   return (
     <div>
       <DropdownMenu>

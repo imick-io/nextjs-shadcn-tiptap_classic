@@ -39,6 +39,7 @@ export const FontSize: FC<Props> = ({ editor }) => {
         <DropdownMenuContent>
           {currentSizeEntries.map(([key, value]) => (
             <DropdownMenuItem
+              key={key}
               style={{
                 fontSize: value[0],
                 ...value[1],
