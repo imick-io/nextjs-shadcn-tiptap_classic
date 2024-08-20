@@ -1,7 +1,7 @@
 "use client";
 
 import { Editor } from "@tiptap/react";
-import { FC, useCallback, useContext, useEffect } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { ButtonToggle } from "../../button-toggle";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,15 +24,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Icon } from "../../icon";
-import { LinkYtContext } from "../context/link-yt-context";
 
 interface Props {
   editor: Editor;
 }
 
 const FormSchema = z.object({
-  url: z
+  src: z
     .string()
     .url()
     .refine((val) => {
@@ -50,27 +48,27 @@ const FormSchema = z.object({
     }, "The URL must be a valid YouTube video link"),
   width: z.number().int().optional(),
   height: z.number().int().optional(),
-  newTab: z.boolean(),
 });
 
 export const LinkDialogYoutube: FC<Props> = ({ editor }) => {
-  const { href, target } = editor.getAttributes("link");
-  const { open, setOpen } = useContext(LinkYtContext);
+  const {
+    src = "",
+    width = 640,
+    height = 480,
+  } = editor.getAttributes("youtube");
+
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      url: href || "",
-      newTab: target === "_blank",
-      width: 640,
-      height: 480,
-    },
+    defaultValues: { src, width, height: 480 },
   });
 
   const setFormValues = useCallback(() => {
-    form.setValue("url", href || "");
-    form.setValue("newTab", target === "_blank");
-  }, [form, href, target]);
+    form.setValue("src", src || "");
+    form.setValue("width", width || 640);
+    form.setValue("height", height || 640);
+  }, [form, src, width, height]);
 
   const onSubmit = (values: z.infer<typeof FormSchema>) => {
     editor
@@ -78,7 +76,7 @@ export const LinkDialogYoutube: FC<Props> = ({ editor }) => {
       .focus()
       .extendMarkRange("link")
       .setYoutubeVideo({
-        src: values.url,
+        src: values.src,
         width: values.width,
         height: values.height,
       })
@@ -95,23 +93,22 @@ export const LinkDialogYoutube: FC<Props> = ({ editor }) => {
     }
   }, [open, setFormValues]);
 
-  const removeLink = () => {
-    editor.chain().focus().extendMarkRange("link").unsetLink().run();
-
-    setOpen(false);
-  };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <ButtonToggle icon="Youtube" tooltip="Link" label="Create Link" />
+        <ButtonToggle
+          icon="Youtube"
+          tooltip="Youtube Video"
+          label="Youtube Video"
+          active={!!src}
+        />
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create Link</DialogTitle>
+          <DialogTitle>Insert Youtube video</DialogTitle>
           <DialogDescription className="sr-only">
-            Create a link to another website or page.
+            Insert a YouTube video by providing the video URL
           </DialogDescription>
         </DialogHeader>
 
@@ -122,7 +119,7 @@ export const LinkDialogYoutube: FC<Props> = ({ editor }) => {
           >
             <FormField
               control={form.control}
-              name="url"
+              name="src"
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center space-x-4">
@@ -172,11 +169,7 @@ export const LinkDialogYoutube: FC<Props> = ({ editor }) => {
               </div>
             </div>
 
-            <div className="flex justify-between">
-              <Button type="button" variant="ghost" onClick={removeLink}>
-                <span className="sr-only">Delete Link</span>
-                <Icon name="Trash2" className="text-destructive" />
-              </Button>
+            <div className="flex justify-end">
               <Button type="submit">Apply</Button>
             </div>
           </form>

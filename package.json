@@ -31,6 +31,7 @@
     "@tiptap/extension-font-family": "^2.6.3",
     "@tiptap/extension-heading": "^2.6.3",
     "@tiptap/extension-highlight": "^2.6.4",
+    "@tiptap/extension-history": "^2.6.4",
     "@tiptap/extension-horizontal-rule": "^2.6.3",
     "@tiptap/extension-image": "^2.6.3",
     "@tiptap/extension-italic": "^2.6.4",
@@ -66,6 +67,7 @@
     "react-hook-form": "^7.52.2",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+    "tiptap-extension-resize-image": "^1.1.8",
     "zod": "^3.23.8"
   },
   "devDependencies": {

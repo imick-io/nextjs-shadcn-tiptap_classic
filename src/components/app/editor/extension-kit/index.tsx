@@ -1,5 +1,6 @@
 import { Text } from "@tiptap/extension-text";
 import { Document } from "@tiptap/extension-document";
+import { History } from "@tiptap/extension-history";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { Paragraph } from "@tiptap/extension-paragraph";
 import { Heading } from "@tiptap/extension-heading";
@@ -23,6 +24,9 @@ import { Subscript } from "@tiptap/extension-subscript";
 import { Code } from "@tiptap/extension-code";
 import { Link } from "@tiptap/extension-link";
 import { Youtube } from "@tiptap/extension-youtube";
+import { Dropcursor } from "@tiptap/extension-dropcursor";
+import { Image } from "@tiptap/extension-image";
+import ImageResize from "tiptap-extension-resize-image";
 
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
@@ -31,6 +35,9 @@ const lowlight = createLowlight(all);
 export const ExtensionKit = () => [
   Document,
   Paragraph,
+  History.configure({
+    depth: 15,
+  }),
   Placeholder.configure({
     placeholder: "Write something...",
   }),
@@ -72,5 +79,12 @@ export const ExtensionKit = () => [
     controls: true,
     nocookie: true,
     allowFullscreen: true,
+  }),
+  Dropcursor,
+  Image,
+  ImageResize.configure({
+    HTMLAttributes: {
+      id: "image-resize",
+    },
   }),
 ];
